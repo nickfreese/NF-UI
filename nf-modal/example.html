@@ -1,0 +1,24 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="nf-modal.js" defer></script>
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+<body>
+<script>
+  window.modalConfig = {
+    content: `<div><h1 class="text-2xl font-bold">Modal Header</h1>Some modal content</div>`
+  }
+</script>
+
+
+<!-- actual click logic not included because it would increase difficulty of triggering modals from any HTML element -->
+<div x-data="{open:false}">
+    <div @click="open = !open" class="cursor-pointer">Open Modal</div>
+    <div x-show="open" x-data="{nfModalConfig: window.modalConfig}" x-html="window.nfModalFactory.getTemplate()"></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="nf-carousel.js" defer></script>
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+<body>
+<script>
+  window.sliderConfig = {
+
+    
+    items:[
+        "<div> some item 1 </div>",
+         "<div> some item 2</div>",
+          "<div class='h-32 bg-slate-300'> some item 3</div>",
+           "<div> some item 4</div>",
+           "<div> some item 5</div>",
+           "<div @click='alert(`clicked carousel item`)'> some item 6</div>",
+           "<div> some item 7</div>",
+           "<div> some item 8</div>",
+    ],
+    currentPosition:0
+
+  }
+</script>
+<div x-data="{nfCarouselConfig: window.sliderConfig}" x-html="window.nfCarouselFactory.getTemplate()"></div>
+
+
+</body>
+</html>
