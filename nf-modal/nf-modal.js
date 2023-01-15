@@ -44,7 +44,7 @@
         lazyContent: config.lazyContent || null,
         content:config.content || "",
         classes: config.classes || "box-border bg-slate-50 m-auto block rounded",
-        dimensionClasses: config.dimensionClasses || "w-10/12 h-5/6 p-20",
+        dimensionClasses: config.dimensionClasses || "w-11/12 h-5/6 md:w-8/12 md:h-3/6 lg:w-7/12 lg:h-3/6 max-w-4xl p-20",
 
         get getClasses(){
           return this.classes + " " + this.dimensionClasses;
