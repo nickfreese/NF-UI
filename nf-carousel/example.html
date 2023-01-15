@@ -12,21 +12,29 @@
 
     
     items:[
-        "<div> some item 1 </div>",
-         "<div> some item 2</div>",
-          "<div class='h-32 bg-slate-300'> some item 3</div>",
-           "<div> some item 4</div>",
-           "<div> some item 5</div>",
-           "<div @click='alert(`clicked carousel item`)'> some item 6</div>",
-           "<div> some item 7</div>",
-           "<div> some item 8</div>",
+           "<div class='relative  ml-0 w-full h-32 p-2 box-border bg-slate-300'> some item 1 </div>",
+           "<div class='relative  w-full h-32 p-2 box-border bg-slate-400'> some item 2</div>",
+           "<div class='relative  w-full h-32 p-2 box-border bg-slate-300'> some item 3</div>",
+           "<div class='relative  w-full h-32 p-2 box-border bg-slate-400'> some item 4</div>",
+           "<div class='relative  w-full h-32 p-2 box-border bg-slate-300'> some item 5</div>",
+           "<div class='relative w-full h-32 p-2 box-border bg-slate-400' @click='alert(`clicked carousel item`)'> some item 6</div>",
+           "<div class='relative  w-full h-32 p-2 box-border bg-slate-300'> some item 7</div>",
+           "<div class='relative mr-0 w-full h-32 p-2 box-border bg-slate-400'> some item 8</div>",
     ],
-    currentPosition:0
+    currentPosition:0,
+    arrowClasses: "text-2xl box-border bg-gray-200 hover:opacity-90",
+    itemClasses: "break-words box-border inline-flex",
+    itemMargin: 0
 
   }
 </script>
-<div x-data="{nfCarouselConfig: window.sliderConfig}" x-html="window.nfCarouselFactory.getTemplate()"></div>
 
+<div class="flex  items-center justify-center h-full bg-gray-100">
+<div class="w-32"></div>
 
+<div x-data="{nfCarouselConfig: window.sliderConfig}" x-html="window.nfCarouselFactory.getTemplate()" class="w-full bg-white"></div>
+
+<div class="w-32"></div>
+</div>
 </body>
 </html>

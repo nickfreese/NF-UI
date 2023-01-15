@@ -9,15 +9,49 @@
 <body>
 <script>
   window.modalConfig = {
-    content: `<div><h1 class="text-2xl font-bold">Modal Header</h1>Some modal content</div>`
+
+    content: `<div><h1 class="text-2xl font-bold">Modal Header</h1>Some modal content</div>`,
+    dimensionClasses: "w-2/6 h-2/6 p-4"
+  }
+
+
+  window.modalLazyConfig = {
+    
+    content: ``,
+    lazyContent: async function(){
+        return fetch('https://nickfreese.com/api/type/project')
+       .then((response) => response.json())
+       .then((data) => {
+            console.log(data);
+            for (project in data) {
+                  data[project].open = false;
+            }
+
+            var html = `
+                <span>Retreived a project name from nick freese API</span><br>
+                <div class="font-bold">Project Name: `+data.cardList[0].name+`</div>
+            `;
+            return html;
+       });
+    }
   }
 </script>
 
+<div class="flex flex-col items-center justify-center h-full">
 
 <!-- actual click logic not included because it would increase difficulty of triggering modals from any HTML element -->
 <div x-data="{open:false}">
-    <div @click="open = !open" class="cursor-pointer">Open Modal</div>
+    <div @click="open = !open" class="cursor-pointer p-4 bg-indigo-500 text-white rounded">Open Modal</div>
     <div x-show="open" x-data="{nfModalConfig: window.modalConfig}" x-html="window.nfModalFactory.getTemplate()"></div>
+</div>
+
+<br><br>
+
+<div x-data="{open:false}">
+    <div @click="open = !open" class="cursor-pointer p-4 bg-indigo-500 text-white rounded">Lazy Loaded Content Modal</div>
+    <div x-show="open" x-data="{nfModalConfig: window.modalLazyConfig}" x-html="window.nfModalFactory.getTemplate()"></div>
+</div>
+
 </div>
 
 </body>

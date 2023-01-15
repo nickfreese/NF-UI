@@ -6,18 +6,18 @@
 
     getTemplate: function(){
 
-      return `<div x-data="window.nfCarouselFactory.i(nfCarouselConfig)" x-ref="nfcarousel" class="w-full max-w-md flex-col">
+      return `<div x-data="window.nfCarouselFactory.i(nfCarouselConfig)" x-ref="nfcarousel" class="w-full flex-col">
     <div class="w-full relative overflow-x-hidden flex">
-          <button class="text-2xl p-2 box-border" @click.prevent="goToPosition(currentPosition-1)" x-html="'&lsaquo;'"></button>
+          <button x-ref="leftarrow" x-bind:class="arrowClasses" @click.prevent="goToPosition(currentPosition-1)" x-html="'&lsaquo;'"></button>
 
     <div class="nf-carousel-outer w-full overflow-x-hidden relative">
         <div class="nf-carousel-inner absolute inline flex w-auto transition-transform">
          <template x-for="item in items">
-           <div  class="nf-carousel-item relative break-words" x-html='item' ></div>
+           <div  x-bind:class="getItemClasses" x-html='item' ></div>
          </template>
         </div>
     </div>
-        <button class="text-2xl p-2 box-border" @click.prevent="goToPosition(currentPosition+1)" x-html="'&rsaquo;'"></button>
+        <button x-ref="rightarrow" x-bind:class="arrowClasses" @click.prevent="goToPosition(currentPosition+1)" x-html="'&rsaquo;'"></button>
 
     </div>
     <template x-if="slider">
@@ -34,6 +34,10 @@
 
         init(){
           var _this = this;
+
+          for (key in config) {
+              _this[key] = config[key];
+          }
           this.$nextTick(() => { 
 
             var items = this.$refs.nfcarousel.querySelectorAll(".nf-carousel-item");
@@ -67,24 +71,33 @@
         },
 
 
-        slider: config.slider || true,
+        slider: true,
         sliderSize:0,
-        sliderSensitivity: config.sliderSensitivity || 25,
-        numberOfItems: config.numberOfItems || 4,
-        slideSize: config.slideSize || 0,
-        currentPosition: config.currentPosition || 0,
-        arrowSize: config.arrowSize || 25,
-        widths: config.widths || {
+        sliderSensitivity:  25,
+        numberOfItems:  4,
+        slideSize:  0,
+        currentPosition:  0,
+        arrowSize:  25,
+        arrowClasses: config.arrowClasses || "text-2xl p-2 box-border",
+        widths:  {
           "1280":5,
           "980":4,
           "700":3,
           "678":2,
           "0":1
         },
-
+        
+        itemClasses: "break-words",
+        itemMargin:  10,
         items:config.items,
+
+        getItemClasses: function(){
+            return "nf-carousel-item relative " + this.itemClasses;
+        },
         resize: function(){
           var _this = this;
+          this.$refs.leftarrow.style.width = _this.arrowSize+1 + "px";
+          this.$refs.rightarrow.style.width = _this.arrowSize+1 + "px";
           var parent = this.$refs.nfcarousel;
           var width = parent.offsetWidth;
           var outer = this.$refs.nfcarousel.querySelector(".nf-carousel-outer");
@@ -104,20 +117,25 @@
           var items = this.$refs.nfcarousel.querySelectorAll(".nf-carousel-item");
           var inner = this.$refs.nfcarousel.querySelector(".nf-carousel-inner");
           
-         
+          _this.slideSize = width/_this.numberOfItems - ((_this.itemMargin));
+          
+          inner.style.width = (_this.slideSize*items.length)+((_this.itemMargin)*(items.length-1)) + "px";
           
           
-          _this.slideSize = width/_this.numberOfItems;
-          
-          inner.style.width = (_this.slideSize*items.length) + "px";
-          
-
 
           for(var i = 0; i < items.length;i++){
               items[i].style.width = _this.slideSize + "px";
+              //items[i].style.marginLeft = _this.itemMargin + "px";
+              if (i < items.length-1) {
+                  items[i].style.marginRight = _this.itemMargin + "px";
+              }
+              
           }
 
           outer.style.height = inner.offsetHeight + "px";
+
+
+          
 
 
           if (_this.slider) {
@@ -142,7 +160,12 @@
              position = 0;
           }
           this.currentPosition = position;
-          inner.style.transform = "translate3d("+ (-(this.slideSize*position)) + "px,0px,0px)";
+          if(position == this.maxSlider){
+              inner.style.transform = "translate3d("+ (-((this.slideSize+(0))*position)) + "px,0px,0px)";
+          } else {
+              inner.style.transform = "translate3d("+ (-((this.slideSize+(this.itemMargin))*position)) + "px,0px,0px)";
+          }
+          
 
           var slider = this.$refs.nfcarousel.querySelector(".nf-carousel-dragslider");
           slider.style.transform = "translate3d("+ (this.sliderSize*position) + "px,0px,0px)";
