@@ -1,0 +1,183 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="nf-mega.js" defer></script>
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+<body>
+<script>
+
+
+  /*
+  *
+   - need to build out tailwind classes responsively.
+   - should flattening for mobile be done with same html or different?  especially in defining triggerable views, like open x category on mobile vs desktop.  megamenu states have to be definite and identifiable.
+   - how should we handle additional functionality integrations like signin/out forms? 
+   - Lets name ech meage menu instance so we can open it with a global, named event.
+   - inital loading on desktop... we have to be able to make top level links prerendered on server (we should be able to use events and identified states for this.)
+  */ 
+  window.megaConfig = {
+
+    name:"mega-main",
+
+    data:[
+    {
+        name: "Category 1",
+        url: "/category1.html",
+        children:[
+            {
+              name:"Sub Cat 1",
+              url:"",
+              children:[
+                 {
+                  name:"Sub Sub Cat 1",
+                  url:""
+                 }
+              ]
+            },
+            {
+              name:"Sub Cat 2",
+              url:""
+            },
+            {
+              name:"Sub Cat 3",
+              url:""
+            }
+        ],
+
+    },
+    {
+        name: "Category 2",
+        url: "/category2.html",
+        children:[
+            {
+              name:"Sub Cat 1",
+              url:""
+            },
+            {
+              name:"Sub Cat 2",
+              url:""
+            },
+            {
+              name:"Sub Cat 3",
+              url:""
+            }
+        ],
+
+    },
+    {
+        name: "Category 3",
+        url: "/category3.html",
+        children:[
+            {
+              name:"3 Sub Cat 1",
+              url:""
+            },
+            {
+              name:"3 Sub Cat 2",
+              url:""
+            },
+            {
+              name:" 3 Sub Cat 3",
+              url:""
+            }
+        ],
+
+    },
+
+    ],
+
+  }
+
+
+
+</script>
+
+<button x-data @click="window.dispatchEvent(new CustomEvent('open-flyout-mega-main', { detail: 1 }))">open flyout</button>
+
+<button x-data @click="window.dispatchEvent(new CustomEvent('open-mega-main', { detail: '' }))">mobile open</button>
+
+<div class="flex flex-col items-center  h-full ">
+
+    <!--<div x-data="{nfMegaConfig: window.megaConfig}" x-html="window.nfMegaFactory.getTemplate()"></div>-->
+
+    <div class="w-full w-3/4" x-data="{nfMegaConfig: window.megaConfig}">
+      
+       <div x-data="window.nfMegaFactory.i(nfMegaConfig)">
+
+            <!-- desktop -->
+            <div class="w-full flex justify-between relative" x-ref="megaDesktopWrap">
+              
+              <template x-for="(link,i) in data">
+                <div x-data="{data: link, open: false}" class="nf-mega-flyout-tab font-bold h-10 flex flex-col justify-center align-center self-start">
+                  <div  x-text="data.name + ' >'" @click="openFlyout(i);" class="text-center border rounded self-start mx-auto cursor-pointer py-2 px-8">
+
+                  </div>
+
+                  <template x-if="typeof data.children !== 'undefined'">
+                    <div   class="nf-mega-flyout hidden absolute top-10 bg-gray-200 w-3/4">
+                     <span class="font-bold" x-text="data.name"></span>
+                     
+                     <template x-for="child in data.children"> 
+                     <div>
+                      <template x-if="typeof child.children !== 'undefined'">
+                      <div class="flex flex-col mb-8">
+                        <div x-text="child.name" class="font-bold"></div>
+                          <div x-data="{flatdata: getFlattenedFlyout(child)}" x-init="console.log(JSON.stringify(flatdata));console.log('asdfads')">
+                            <template x-for="(endLink,index) in flatdata">
+                              <template x-if="index > 0">
+                                  <div x-text="endLink.name" ></div>
+                              </template>
+                            </template>
+                          </div>
+                       </div>
+                       </template>
+
+                      <template x-if="typeof child.children == 'undefined'">
+                      <div>
+                          <span class="" x-text="child.name"></span> 
+                       </div>
+                       </template>
+                      </div>
+                     </template>
+                    </div>
+                   </template>
+                </div>
+              </template>
+
+            </div>
+
+            <!-- mobile -->
+            <div x-show="mobileOpen" x-transition>
+              
+            <div class="top-0 left-0 fixed w-full h-full bg-gray-600 bg-opacity-75" @click.self="mobileOpen = !mobileOpen">
+                <div class="w-10/12 bg-white h-full">
+                  
+                <div class="relative w-full h-full">
+                  <template x-for="(link,i) in data">
+                    <div x-text="link.name + getTitleAdditions(link)" class="p-2 border-t border-slate-80" @click="openMobileView(link.name)"></div>
+                  </template>
+
+                  
+                  <template x-for="(link,i) in data">
+                    <div x-html="getMobileCategoryTemplateRecurse(link)"></div>
+                  </template>
+                  
+
+                </div>  
+                </div>  
+            </div>
+
+            </div>
+
+
+       </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="nf-button.js" defer></script>
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          keyframes: {
+            quiver: {
+              '40%': { transform: 'scale(0.99, 0.99)' },
+              '50%, 60%': { transform: 'scale(1.02, 1.01)' }
+            },
+            shake: {
+              "10%, 90%": {transform: "translate3d(-1px, 0, 0)"},
+              "20%, 80%": {transform: "translate3d(2px, 0, 0)"},
+              "30%, 50%, 70%": {transform: "translate3d(-4px, 0, 0)"},
+              "40%, 60%": {transform: "translate3d(4px, 0, 0)"},
+            },
+            success: {
+              "0%": {transform: "scale(1, 1) translate3d(0, 0, 0)"},
+              "95%": {transform: "scale(1.05, 1.05) translate3d(0, -2px, 0)"}
+            }
+          },
+      
+      animation: {
+        'quiver': 'quiver 0.5s cubic-bezier(.36,.07,.19,.97) both',
+        'shake': 'shake 0.3s cubic-bezier(.36,.07,.19,.97) both',
+        'success': 'success 0.2s ease-in both',
+      },
+    }
+        
+      }
+    }
+  </script>
+ 
+  <script>
+     
+     /*
+        
+        Our callback functions have to maintain their own access to the alpine compoenents scope.  So defining var _this = this; will give the child scopes for things like callback functions access to the alpine compoenent scope if its needed.
+
+     */
+
+
+     var myClickFunction = async function(){
+      
+        try {
+          const response = await fetch("https://nickfreese.com/api/type/project");
+          
+          if (response?.ok) {
+
+            const jsonData = await response.json();
+            console.log(jsonData);
+            return true;
+          } else {
+            console.log(`HTTP Response Code: ${response?.status}`)
+            return false;
+          }
+        } catch (e) {
+            return false;
+        }
+
+      }
+
+     
+
+     //error
+     var myErrorFunction = async function(){
+          
+          try {
+
+              const response = await fetch("nope.json");
+          
+              if (response?.ok) {
+
+                const jsonData = await response.json();
+                console.log(jsonData);
+                return true;
+              } else {
+                console.log(`HTTP Response Code: ${response?.status}`)
+                return false;
+              }
+    
+          } catch (e) {
+            return false;
+          }
+          
+
+     };
+  </script>
+  </head>
+
+<body>
+
+
+<div class="flex  items-center justify-center h-full bg-gray-100">
+<div class="flex flex-col">
+
+<h2>Synchronous Success</h2>
+<div x-data="{nfButtonConfig: {buttonDefault:'button', click:function(){return true;} }}" x-html="window.nfButtonFactory.getTemplate()"></div>
+
+<br><br>
+
+<h2>Async Success</h2>
+<div x-data="{nfButtonConfig: {buttonDefault:'button', click:myClickFunction, buttonColor: 'bg-slate-700', textColor:'text-white', buttonBottomBorderColor:'border-slate-900', successColor:'bg-emerald-700' }}" x-html="window.nfButtonFactory.getTemplate()"></div>
+
+<br><br>
+
+<h2>Async Error</h2>
+<div x-data="{nfButtonConfig: {buttonDefault:'button', click:myErrorFunction }}" x-html="window.nfButtonFactory.getTemplate()"></div>
+
+</div>
+
+</div>
+</body>
+</html>

@@ -74,3 +74,71 @@ available settings:
     <div x-show="open" x-data="{nfModalConfig: window.modalConfig}" x-html="window.nfModalFactory.getTemplate()"></div>
 </div>
 ```
+
+
+
+### NF-Button
+
+```
+<!-- We have ti add some animations to the tailwind config for this UI widget -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          keyframes: {
+            quiver: {
+              '40%': { transform: 'scale(0.99, 0.99)' },
+              '50%, 60%': { transform: 'scale(1.02, 1.01)' }
+            },
+            shake: {
+              "10%, 90%": {transform: "translate3d(-1px, 0, 0)"},
+              "20%, 80%": {transform: "translate3d(2px, 0, 0)"},
+              "30%, 50%, 70%": {transform: "translate3d(-4px, 0, 0)"},
+              "40%, 60%": {transform: "translate3d(4px, 0, 0)"},
+            },
+            success: {
+              "0%": {transform: "scale(1, 1) translate3d(0, 0, 0)"},
+              "95%": {transform: "scale(1.05, 1.05) translate3d(0, -2px, 0)"}
+            }
+          },
+      
+      animation: {
+        'quiver': 'quiver 0.5s cubic-bezier(.36,.07,.19,.97) both',
+        'shake': 'shake 0.3s cubic-bezier(.36,.07,.19,.97) both',
+        'success': 'success 0.2s ease-in both',
+      },
+    }
+        
+      }
+    }
+  </script>
+  <script>
+  
+   var myClickFunction = async function(){
+      
+        try {
+          const response = await fetch("https://nickfreese.com/api/type/project");
+          
+          if (response?.ok) {
+
+            const jsonData = await response.json();
+            console.log(jsonData);
+            return true;
+          } else {
+            console.log(`HTTP Response Code: ${response?.status}`)
+            return false;
+          }
+        } catch (e) {
+            return false;
+        }
+
+      }
+  </script>
+
+  <div x-data="{nfButtonConfig: {buttonDefault:'button', click:function(){return true;} }}" x-html="window.nfButtonFactory.getTemplate()"></div>
+```
+
+
+
+### NF-Mega
+ - mega menu coming soon!

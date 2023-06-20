@@ -1,0 +1,95 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="nf-mega.js" defer></script>
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+<body>
+<script>
+
+
+  /*
+  *
+   - need to build out tailwind classes responsively.
+   - should flattening for mobile be done with same html or different?  especially in defining triggerable views, like open x category on mobile vs desktop.  megamenu states have to be definite and identifiable.
+   - how should we handle additional functionality integrations like signin/out forms? 
+   - Lets name ech meage menu instance so we can open it with a global, named event.
+   - inital loading on desktop... we have to be able to make top level links prerendered on server (we should be able to use events and identified states for this.)
+  */ 
+  window.megaConfig = {
+
+    data:[
+    {
+        name: "Category 1",
+        url: "/category1.html",
+        children:[
+            {
+              name:"Sub Cat 1",
+              url:"",
+              children:[
+                 {
+                  name:"Sub Sub Cat 1"
+                 }
+              ]
+            },
+            {
+              name:"Sub Cat 2",
+              url:""
+            },
+            {
+              name:"Sub Cat 3",
+              url:""
+            }
+        ],
+
+    },
+    {
+        name: "Category 2",
+        url: "/category2.html",
+        children:[
+            {
+              name:"Sub Cat 1",
+              url:""
+            },
+            {
+              name:"Sub Cat 2",
+              url:""
+            },
+            {
+              name:"Sub Cat 3",
+              url:""
+            }
+        ],
+
+    },
+
+    ],
+
+  }
+
+
+
+</script>
+
+<div class="flex flex-col items-center justify-center h-full">
+
+    <!--<div x-data="{nfMegaConfig: window.megaConfig}" x-html="window.nfMegaFactory.getTemplate()"></div>-->
+
+    <div x-data="{nfMegaConfig: window.megaConfig}">
+      
+       <div x-data="window.nfMegaFactory.i(nfMegaConfig)">
+            <div>
+              <template x-for="link in data">
+                <div x-data="{data: link}" x-html="getCategoryTemplate()"></div>
+              </template>
+            </div>
+       </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
