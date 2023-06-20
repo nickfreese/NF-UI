@@ -1,6 +1,5 @@
 # NF-UI
  - A UI component library for AlpineJS and Tailwind
- - One down, a bunch to go
 
 
 ### NF-Carousel
@@ -113,7 +112,7 @@ available settings:
     }
   </script>
   <script>
-  
+
    var myClickFunction = async function(){
       
         try {
